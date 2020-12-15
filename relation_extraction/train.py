@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import tqdm
 
 from relation_extraction.metrics import calculate_score
 

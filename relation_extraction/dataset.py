@@ -1,5 +1,4 @@
 import torch
-from torch.nn.utils.rnn import pad_sequence
 
 class REDataset:
     def __init__(self, parser, tokenizer):
@@ -32,12 +31,14 @@ class REDataset:
             tokens_ids.extend(tokens_idx)
             tags_ids.extend(tags_idx)
 
-        return torch.LongTensor(tokens_ids), torch.LongTensor(tags_ids)
+        length = len(tags_ids)
+
+        return tokens_ids, tags_ids, length
 
     def paddings(self, batch):
-        tokens, tags = list(zip(*batch))
+        max_length = max([length[2] for length in batch])
+        tokens = [token[0] + [0] * (max_length - len(token[0])) for token in batch]
+        tags = [tag[1] + [0] * (max_length - len(tag[1])) for tag in batch]
 
-        tokens = pad_sequence(tokens, batch_first=True)
-        tags = pad_sequence(tags, batch_first=True)
+        return torch.LongTensor(tokens), torch.LongTensor(tags)
 
-        return tokens, tags
