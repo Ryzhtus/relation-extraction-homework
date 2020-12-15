@@ -27,10 +27,10 @@ def compute_precision_and_recall(true_positive, false_positive, false_negative):
 
 def cacl_rel_tp_fp_fn(true_data, pred_data):
     true_rels = true_data.relations
-    true_ners = true_data.ners
+    true_ners = true_data.ner_tags
 
     pred_rels = pred_data.relations
-    pred_ners = pred_data.ners
+    pred_ners = pred_data.ner_tags
 
     true_positive = 0
     false_positive = 0
@@ -41,17 +41,17 @@ def cacl_rel_tp_fp_fn(true_data, pred_data):
             if lh_rel[0] != rh_rel[0]:
                 continue
             
-            lh_ner_idx_1 = lh_data.ner_id_2_idx[lh_rel[1]]
-            lh_ner_idx_2 = lh_data.ner_id_2_idx[lh_rel[2]]
+            lh_ner_idx_1 = lh_data.ner2idx[lh_rel[1]]
+            lh_ner_idx_2 = lh_data.ner2idx[lh_rel[2]]
 
             # if not rh_rel[1] in rh_data.ner_id_2_idx:
             #     print(1)
 
-            rh_ner_idx_1 = rh_data.ner_id_2_idx[rh_rel[1]]
-            rh_ner_idx_2 = rh_data.ner_id_2_idx[rh_rel[2]]
+            rh_ner_idx_1 = rh_data.ner2idx[rh_rel[1]]
+            rh_ner_idx_2 = rh_data.ner2idx[rh_rel[2]]
 
-            if (lh_data.ners[lh_ner_idx_1] == rh_data.ners[rh_ner_idx_1] and lh_data.ners[lh_ner_idx_2] == rh_data.ners[rh_ner_idx_2]) \
-                or (lh_data.ners[lh_ner_idx_1] == rh_data.ners[rh_ner_idx_2] and lh_data.ners[lh_ner_idx_2] == rh_data.ners[rh_ner_idx_1]):
+            if (lh_data.ner_tags[lh_ner_idx_1] == rh_data.ner_tags[rh_ner_idx_1] and lh_data.ner_tags[lh_ner_idx_2] == rh_data.ner_tags[rh_ner_idx_2]) \
+                or (lh_data.ner_tags[lh_ner_idx_1] == rh_data.ner_tags[rh_ner_idx_2] and lh_data.ner_tags[lh_ner_idx_2] == rh_data.ner_tags[rh_ner_idx_1]):
                 return True
         return False
 

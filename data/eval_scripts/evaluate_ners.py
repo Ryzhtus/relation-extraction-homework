@@ -97,13 +97,13 @@ def calc_ner_f1(true_dir, pred_dir):
 
 
             true_data = read_file(true_doc)
-            true_ners = sorted(true_data.ners, key=lambda x: x[1])
+            true_ners = sorted(true_data.ner_tags, key=lambda x: x[1])
 
             pred_ners = []
             if os.path.exists(pred_doc):
                 try:
                     pred_data = read_file(pred_doc)
-                    pred_ners = sorted(pred_data.ners, key=lambda x: x[1])
+                    pred_ners = sorted(pred_data.ner_tags, key=lambda x: x[1])
                 except:
                     pass
 
