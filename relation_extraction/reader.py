@@ -1,8 +1,8 @@
 class Reader:
     def __init__(self, data):
-        self.data = data  # Str
-        self.relations = []  # List[Tuple[str, int, int]]
-        self.ner_tags = []  # List[Tuple[str, int, int]]
+        self.data = data
+        self.relations = []
+        self.ner_tags = []
 
         self.rel2idx = dict()
         self.ner2idx = dict()

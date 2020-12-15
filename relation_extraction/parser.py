@@ -93,10 +93,6 @@ class Parser:
 
         for file_path in tqdm.tqdm(self.folder_paths):
             data = self.read_file(file_path)
-            """data_ner_tags = [{"id": i, "ner_type": data.ner_tags[idx][0],
-                              "start": data.ner_tags[idx][1],
-                              "end": data.ner_tags[idx][2]} for i, idx in data.ner2idx.items()]"""
-
             data_relations = [{'id': i, 'relation_type': data.relations[idx][0],
                                'start_end_ne_1': data.ner_tags[data.ner2idx[data.relations[idx][1]]],
                                'start_end_ne_2': data.ner_tags[data.ner2idx[data.relations[idx][2]]]} for i, idx in data.rel2idx.items()]
@@ -107,29 +103,9 @@ class Parser:
                 for sent, (sent_start, _) in zip(sentences, sentences_spans):
                     token, spans = self.span_tokens(sent, shift=sent_start)
                     tokens.append(token)
-                    #ner_tags.append(self.convert_to_conll_ner(data_ner_tags, spans))
                     relation_tags.append(self.convert_to_conll_relation(data_relations, spans))
 
-        return tokens, relation_tags #ner_tags,
-
-    """
-    @staticmethod
-    def convert_to_conll_ner(ner_tags, spans):
-        conll_ners = []
-
-        for token_start, token_end in spans:
-
-            for ner in ner_tags:
-
-                if (ner["start"] <= token_start) and (ner["end"] >= token_end):
-                    prefix = "I" if (ner["start"] < token_start) else "B"
-                    conll_ners.append(prefix + "-" + ner["ner_type"])
-                    break
-
-            else:
-                conll_ners.append("O")
-
-        return conll_ners"""
+        return tokens, relation_tags
 
     @staticmethod
     def convert_to_conll_relation(relations, spans):
