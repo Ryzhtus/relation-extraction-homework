@@ -1,8 +1,9 @@
 import torch
 
 class REDataset:
-    def __init__(self, parser, tokenizer):
-        self.tokens, self.ner_tags, self.relation_tags = parser.extract_data()
+    def __init__(self, tokens, tags, tokenizer):
+        self.tokens = tokens
+        self.relation_tags = tags
         self.tokenizer = tokenizer
 
         self.rel_tags = list(set(word_rel for sent in self.relation_tags for word_rel in sent))
