@@ -1,3 +1,6 @@
+import torch
+from torch.nn.utils.rnn import pad_sequence
+
 class REDataset:
     def __init__(self, parser, tokenizer):
         self.tokens, self.ner_tags, self.relation_tags = parser.extract_data()
@@ -18,21 +21,23 @@ class REDataset:
         sentences.append(["[CLS]"] + words + ["[SEP]"])
         relations.append(["<PAD>"] + tags + ["<PAD>"])
         tokens_ids, tags_ids = [], []
+
         for word, tag in zip(sentences[0], relations[0]):
             tokens = self.tokenizer.tokenize(word) if word not in ("[CLS]", "[SEP]") else [word]
             tokens_idx = self.tokenizer.convert_tokens_to_ids(tokens)
 
-            tag = [tag] + ["<PAD>"] * (len(tokens) - 1)  # <PAD>: no decision
-            tags_idx = [self.rel_tag2idx[each] for each in tag]  # (T,)
+            tag = [tag] + ["<PAD>"] * (len(tokens) - 1)
+            tags_idx = [self.rel_tag2idx[each] for each in tag]
 
             tokens_ids.extend(tokens_idx)
             tags_ids.extend(tags_idx)
 
-        assert len(tokens_ids) == len(tags_ids), "words: {}, len(tags_ids)={}, tokens_ids={}, tags_ids={}".format(words, len(tags_ids), tokens_ids, tags_ids)
+        return torch.LongTensor(tokens_ids), torch.LongTensor(tags_ids)
 
-        sequential_length = len(tags_ids)
+    def paddings(self, batch):
+        tokens, tags = list(zip(*batch))
 
-        words = " ".join(words)
-        tags = " ".join(tags)
-        return words, tokens_ids, tags, tags_ids, sequential_length
+        tokens = pad_sequence(tokens, batch_first=True)
+        tags = pad_sequence(tags, batch_first=True)
 
+        return tokens, tags
