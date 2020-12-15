@@ -66,8 +66,7 @@ def eval_epoch(model, criterion, data, indexer, device):
     print('Test Loss = {:.5f}, F1-score = {:.3%}'.format(epoch_loss / len(data), epoch_score / len(data)))
 
 
-def train_model(model, criterion, optimizer, train_data, test_data, indexer, device, epochs=1):
+def train_model(model, criterion, optimizer, train_data, indexer, device, epochs=1):
     for epoch in range(epochs):
         print('Epoch {} / {}'.format(epoch + 1, epochs))
         train_epoch(model, criterion, optimizer, train_data, indexer, device)
-        #eval_epoch(model, criterion, test_data, indexer, device)
