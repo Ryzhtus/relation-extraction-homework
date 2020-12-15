@@ -11,8 +11,8 @@ def train_epoch(model, criterion, optimizer, data, indexer, device):
     model.train()
 
     for batch in data:
-        tokens = batch[1].to(device)
-        tags = batch[3].to(device)
+        tokens = batch[0].to(device)
+        tags = batch[1].to(device)
 
         predictions = model(tokens)
         predictions = predictions.view(-1, predictions.shape[-1])
