@@ -1,15 +1,23 @@
 import torch
 
 class REDataset:
-    def __init__(self, tokens, tags, tokenizer):
+    def __init__(self, tokens, tags, tokenizer, tag2idx, idx2tag):
         self.tokens = tokens
         self.relation_tags = tags
         self.tokenizer = tokenizer
 
         self.rel_tags = list(set(word_rel for sent in self.relation_tags for word_rel in sent))
         self.rel_tags = ["<PAD>"] + self.rel_tags
-        self.rel_tag2idx = {tag: idx for idx, tag in enumerate(self.rel_tags)}
-        self.rel_idx2tag = {idx: tag for idx, tag in enumerate(self.rel_tags)}
+
+        if tag2idx:
+            self.rel_tag2idx = tag2idx
+        else:
+            self.rel_tag2idx = {tag: idx for idx, tag in enumerate(self.rel_tags)}
+
+        if idx2tag:
+            self.rel_idx2tag = idx2tag
+        else:
+            self.rel_idx2tag = {idx: tag for idx, tag in enumerate(self.rel_tags)}
 
     def __len__(self):
         return len(self.tokens)
