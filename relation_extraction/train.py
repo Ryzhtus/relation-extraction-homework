@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import tqdm
 
 from relation_extraction.metrics import calculate_score
 
@@ -9,7 +10,7 @@ def train_epoch(model, criterion, optimizer, data, indexer, device):
 
     model.train()
 
-    for batch in data:
+    for batch in tqdm.tqdm(data, total=len(data)):
         tokens = batch[1].to(device)
         tags = batch[3].to(device)
 
@@ -44,7 +45,7 @@ def eval_epoch(model, criterion, data, indexer, device):
     model.eval()
 
     with torch.no_grad():
-        for batch in data:
+        for batch in tqdm.tqdm(data, total=len(data)):
             tokens = batch[1].to(device)
             tags = batch[3].to(device)
 
