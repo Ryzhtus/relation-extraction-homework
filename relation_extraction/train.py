@@ -10,7 +10,7 @@ def train_epoch(model, criterion, optimizer, data, indexer, device):
 
     model.train()
 
-    for batch in tqdm.tqdm(data, total=len(data)):
+    for batch in data:
         tokens = batch[1].to(device)
         tags = batch[3].to(device)
 
@@ -35,7 +35,7 @@ def train_epoch(model, criterion, optimizer, data, indexer, device):
         optimizer.step()
         torch.cuda.empty_cache()
 
-    print('Train Average Loss = {:.5f}, F1-score = {:.3f}'.format(epoch_loss / len(data), epoch_score / len(data)))
+    print('Train Average Loss = {:.5f}, F1-score = {:.3%}'.format(epoch_loss / len(data), epoch_score / len(data)))
 
 
 def eval_epoch(model, criterion, data, indexer, device):
@@ -45,7 +45,7 @@ def eval_epoch(model, criterion, data, indexer, device):
     model.eval()
 
     with torch.no_grad():
-        for batch in tqdm.tqdm(data, total=len(data)):
+        for batch in data:
             tokens = batch[1].to(device)
             tags = batch[3].to(device)
 
@@ -64,7 +64,7 @@ def eval_epoch(model, criterion, data, indexer, device):
             epoch_loss += loss.item()
             epoch_score += f_score
 
-    print('Eval Average Loss = {:.5f}, F1-score = {:.3f}'.format(epoch_loss / len(data), epoch_score / len(data)))
+    print('Eval Average Loss = {:.5f}, F1-score = {:.3%}'.format(epoch_loss / len(data), epoch_score / len(data)))
 
 
 def train_model(model, criterion, optimizer, train_data, test_data, indexer, device, epochs=1):
